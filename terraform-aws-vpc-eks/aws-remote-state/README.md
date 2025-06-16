@@ -1,4 +1,59 @@
-# terraform-projects
+# Terraform Backend S3 Bucket with KMS Encryption
+
+This Terraform configuration creates an **S3 bucket** with **KMS encryption** to be used as a **remote backend for Terraform state**. It is pre-configured for best practices such as versioning and public access blocking.
+
+## 📦 What This Module Does
+
+- Creates a secure **S3 bucket** with:
+  - **Server-side encryption** using a custom **AWS KMS key**
+  - **Bucket versioning** enabled
+  - **Public access** fully blocked
+
+- Outputs:
+  - The **KMS key ARN**
+  - The **S3 bucket name**
+
+## 🚀 Usage Instructions
+
+1. Clone this directory or add it to your Terraform project.
+2. Initialize Terraform:
+
+   ```bash
+   terraform init
+   ```
+
+3. Create resources:
+
+   ```bash
+   terraform apply
+   ```
+
+## 🔧 Customization
+
+You can customize the Terraform backend resources by modifying the `local` block in `main.tf`.
+
+### 🔄 Parameters to Customize
+
+- **`region`**: Set your preferred AWS region.
+- **`bucket_name`**: Provide a unique name for your S3 bucket.
+- **`tags`**: Add key-value pairs to tag your AWS resources for cost tracking, organization, or policy enforcement.
+
+### 📝 Example
+
+Edit the `locals` block in `main.tf`:
+
+```hcl
+locals {
+  region      = "us-west-2"
+  bucket_name = "my-custom-terraform-backend"
+  tags = {
+    terraform_managed = "true"
+    Department        = "Engineering"
+    Team              = "DevOps"
+  }
+}
+```
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
