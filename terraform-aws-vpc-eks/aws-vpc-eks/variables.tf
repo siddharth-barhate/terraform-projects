@@ -3,16 +3,6 @@ variable "region" {
   type        = string
 }
 
-variable "bucket" {
-  description = "The name of the S3 bucket used for storing Terraform state files."
-  type        = string
-}
-
-variable "key" {
-  description = "The key within the S3 bucket to store the Terraform state file."
-  type        = string
-}
-
 variable "vpc_name" {
   description = "The name to assign to the VPC."
   type        = string

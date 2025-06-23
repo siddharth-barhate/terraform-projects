@@ -32,16 +32,16 @@ Follow these steps to configure and initialize the Terraform project:
    ```bash
    mv terraform.tfvars.template terraform.tfvars
    ```
+
 2. **Update Variable Values**  
    Open `terraform.tfvars` and update the values as needed for your environment (e.g., VPC CIDR, subnet ranges, region, tags, etc.).
 
 3. **Initialize Terraform Backend**  
-    Initialize the backend using the configuration from `terraform.tfvars`
+    Initialize the backend by updating the file `backend.tf` and run command:
    ```bash
-   terraform init -backend-config=terraform.tfvars
+   terraform init
    ```
-⚠️ Note: You only need to modify terraform.tfvars.
-Use the S3 bucket that was generated previously in the aws-remote-state directory for backend configuration.
+      Use the S3 bucket that was generated previously in the aws-remote-state directory for backend configuration.
 
 4. **Create resources:**  
    ```bash
@@ -82,12 +82,10 @@ Use the S3 bucket that was generated previously in the aws-remote-state director
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bucket"></a> [bucket](#input\_bucket) | The name of the S3 bucket used for storing Terraform state files. | `string` | n/a | yes |
 | <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | Boolean flag to enable or disable VPC flow logs. | `bool` | n/a | yes |
 | <a name="input_enable_nat_gateway"></a> [enable\_nat\_gateway](#input\_enable\_nat\_gateway) | Boolean flag to enable or disable the creation of NAT gateways. | `bool` | n/a | yes |
 | <a name="input_enable_vpn_gateway"></a> [enable\_vpn\_gateway](#input\_enable\_vpn\_gateway) | Boolean flag to enable or disable the creation of a VPN gateway. | `bool` | n/a | yes |
 | <a name="input_intra_subnets"></a> [intra\_subnets](#input\_intra\_subnets) | List of CIDR blocks for intra (internal-only) subnets. | `list(string)` | n/a | yes |
-| <a name="input_key"></a> [key](#input\_key) | The key within the S3 bucket to store the Terraform state file. | `string` | n/a | yes |
 | <a name="input_one_nat_gateway_per_az"></a> [one\_nat\_gateway\_per\_az](#input\_one\_nat\_gateway\_per\_az) | If true, creates one NAT gateway in each availability zone. | `bool` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | List of CIDR blocks for the private subnets. | `list(string)` | n/a | yes |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | List of CIDR blocks for the public subnets. | `list(string)` | n/a | yes |

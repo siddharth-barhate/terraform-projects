@@ -4,11 +4,7 @@
     Department        = "Engineering"
     Team              = "Platfrom Engineering"
   }
-
-# Backend Configuration
 region = "ap-south-1"
-bucket = ""
-key = "dev/project/terraform.tfstate"
 
 # VPC Configuration
 vpc_name = "eks-dev"

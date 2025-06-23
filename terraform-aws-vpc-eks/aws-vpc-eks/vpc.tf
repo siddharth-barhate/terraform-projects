@@ -1,5 +1,6 @@
 locals {
   vpc_flow_logs_bucket = "vpc-flow-logs-s3-${random_pet.this.id}"
+
 }
 
 module "vpc" {
