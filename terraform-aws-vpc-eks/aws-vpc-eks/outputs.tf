@@ -42,3 +42,18 @@ output "vpc_flow_log_id" {
   description = "The ID of the Flow Log resource"
   value       = module.vpc.vpc_flow_log_id
 }
+
+output "eks_cluster_name" {
+  description = "The name of the EKS cluster"
+  value       = module.eks.cluster_name
+}
+
+output "cluster_arn" {
+  description = "The Amazon Resource Name (ARN) of the cluster"
+  value       = module.eks.cluster_arn
+}
+
+output "node_iam_role_name" {
+  description = "EKS Auto node IAM role name"
+  value       = module.eks.node_iam_role_name
+}

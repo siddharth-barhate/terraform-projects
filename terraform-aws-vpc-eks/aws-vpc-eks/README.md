@@ -68,6 +68,8 @@ Follow these steps to configure and initialize the Terraform project:
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_eks"></a> [eks](#module\_eks) | terraform-aws-modules/eks/aws | ~> 20.31 |
+| <a name="module_eks_managed_node_group"></a> [eks\_managed\_node\_group](#module\_eks\_managed\_node\_group) | terraform-aws-modules/eks/aws//modules/eks-managed-node-group | 20.37.1 |
 | <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 3.0 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | 5.21.0 |
 
@@ -82,10 +84,21 @@ Follow these steps to configure and initialize the Terraform project:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_ami_type"></a> [ami\_type](#input\_ami\_type) | AMI type to use for the managed node group (e.g., 'AL2\_x86\_64', 'BOTTLEROCKET\_x86\_64'). | `string` | n/a | yes |
+| <a name="input_cluster_endpoint_public_access"></a> [cluster\_endpoint\_public\_access](#input\_cluster\_endpoint\_public\_access) | Whether the EKS cluster control plane endpoint is publicly accessible. | `bool` | n/a | yes |
+| <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Name of the EKS cluster. | `string` | n/a | yes |
+| <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | Kubernetes version for the EKS cluster (e.g., '1.29'). | `string` | n/a | yes |
+| <a name="input_create_managed_node_group"></a> [create\_managed\_node\_group](#input\_create\_managed\_node\_group) | Whether to create a managed node group as part of the EKS cluster. | `bool` | n/a | yes |
+| <a name="input_enable_cluster_creator_admin_permissions"></a> [enable\_cluster\_creator\_admin\_permissions](#input\_enable\_cluster\_creator\_admin\_permissions) | Whether to grant full administrative permissions to the cluster creator. | `bool` | n/a | yes |
 | <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | Boolean flag to enable or disable VPC flow logs. | `bool` | n/a | yes |
 | <a name="input_enable_nat_gateway"></a> [enable\_nat\_gateway](#input\_enable\_nat\_gateway) | Boolean flag to enable or disable the creation of NAT gateways. | `bool` | n/a | yes |
 | <a name="input_enable_vpn_gateway"></a> [enable\_vpn\_gateway](#input\_enable\_vpn\_gateway) | Boolean flag to enable or disable the creation of a VPN gateway. | `bool` | n/a | yes |
+| <a name="input_instance_types"></a> [instance\_types](#input\_instance\_types) | List of EC2 instance types to use for the managed node group. | `list(string)` | n/a | yes |
 | <a name="input_intra_subnets"></a> [intra\_subnets](#input\_intra\_subnets) | List of CIDR blocks for intra (internal-only) subnets. | `list(string)` | n/a | yes |
+| <a name="input_managed_ng_desired_size"></a> [managed\_ng\_desired\_size](#input\_managed\_ng\_desired\_size) | Desired number of nodes in the managed node group. | `number` | n/a | yes |
+| <a name="input_managed_ng_max_size"></a> [managed\_ng\_max\_size](#input\_managed\_ng\_max\_size) | Maximum number of nodes in the managed node group. | `number` | n/a | yes |
+| <a name="input_managed_ng_min_size"></a> [managed\_ng\_min\_size](#input\_managed\_ng\_min\_size) | Minimum number of nodes in the managed node group. | `number` | n/a | yes |
+| <a name="input_managed_node_group_name"></a> [managed\_node\_group\_name](#input\_managed\_node\_group\_name) | Name of the managed node group within the EKS cluster. | `string` | n/a | yes |
 | <a name="input_one_nat_gateway_per_az"></a> [one\_nat\_gateway\_per\_az](#input\_one\_nat\_gateway\_per\_az) | If true, creates one NAT gateway in each availability zone. | `bool` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | List of CIDR blocks for the private subnets. | `list(string)` | n/a | yes |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | List of CIDR blocks for the public subnets. | `list(string)` | n/a | yes |
@@ -100,9 +113,12 @@ Follow these steps to configure and initialize the Terraform project:
 
 | Name | Description |
 |------|-------------|
+| <a name="output_cluster_arn"></a> [cluster\_arn](#output\_cluster\_arn) | The Amazon Resource Name (ARN) of the cluster |
+| <a name="output_eks_cluster_name"></a> [eks\_cluster\_name](#output\_eks\_cluster\_name) | The name of the EKS cluster |
 | <a name="output_igw_id"></a> [igw\_id](#output\_igw\_id) | The ID of the Internet Gateway |
 | <a name="output_intra_subnets"></a> [intra\_subnets](#output\_intra\_subnets) | List of IDs of intra subnets |
 | <a name="output_natgw_ids"></a> [natgw\_ids](#output\_natgw\_ids) | List of NAT Gateway IDs |
+| <a name="output_node_iam_role_name"></a> [node\_iam\_role\_name](#output\_node\_iam\_role\_name) | EKS Auto node IAM role name |
 | <a name="output_private_subnets"></a> [private\_subnets](#output\_private\_subnets) | List of IDs of private subnets |
 | <a name="output_public_subnets"></a> [public\_subnets](#output\_public\_subnets) | List of IDs of public subnets |
 | <a name="output_vpc_arn"></a> [vpc\_arn](#output\_vpc\_arn) | The ARN of the VPC |
