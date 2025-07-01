@@ -57,3 +57,14 @@ output "node_iam_role_name" {
   description = "EKS Auto node IAM role name"
   value       = module.eks.node_iam_role_name
 }
+
+output "node_group_arn" {
+  description = "EKS Auto node IAM role name"
+  value       = module.eks_managed_node_group[*].node_group_arn
+
+}
+
+output "node_group_taints" {
+  description = "List of objects containing information about taints applied to the node group"
+  value       = module.eks_managed_node_group[*].node_group_taints
+}

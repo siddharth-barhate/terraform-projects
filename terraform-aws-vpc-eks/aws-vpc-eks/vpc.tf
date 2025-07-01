@@ -19,8 +19,13 @@ module "vpc" {
   enable_flow_log           = var.enable_flow_log
   flow_log_destination_type = "s3"
   flow_log_destination_arn  = module.s3_bucket.s3_bucket_arn
-
-  tags = var.tags
+  tags                      = var.tags
+  public_subnet_tags = {
+    "kubernetes.io/role/elb" = 1
+  }
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb" = 1
+  }
 }
 
 # S3 Bucket
@@ -35,8 +40,7 @@ module "s3_bucket" {
   bucket        = local.vpc_flow_logs_bucket
   policy        = data.aws_iam_policy_document.flow_log_s3.json
   force_destroy = true
-
-  tags = var.tags
+  tags          = var.tags
 }
 
 data "aws_iam_policy_document" "flow_log_s3" {
@@ -49,7 +53,6 @@ data "aws_iam_policy_document" "flow_log_s3" {
     actions   = ["s3:PutObject"]
     resources = ["arn:aws:s3:::${local.vpc_flow_logs_bucket}/AWSLogs/*"]
   }
-
   statement {
     sid = "AWSLogDeliveryAclCheck"
     principals {
@@ -59,4 +62,70 @@ data "aws_iam_policy_document" "flow_log_s3" {
     actions   = ["s3:GetBucketAcl"]
     resources = ["arn:aws:s3:::${local.vpc_flow_logs_bucket}"]
   }
+}
+
+# EKS Endpoint
+resource "aws_vpc_endpoint" "eks" {
+  service_name      = "com.amazonaws.${var.region}.eks"
+  vpc_id            = module.vpc.vpc_id
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = module.vpc.private_subnets
+}
+
+# ECR Endpoint
+# ECR API
+resource "aws_vpc_endpoint" "ecr_api" {
+  service_name      = "com.amazonaws.${var.region}.ecr.api"
+  vpc_id            = module.vpc.vpc_id
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = module.vpc.private_subnets
+}
+
+# ECR Docker Registry
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  service_name      = "com.amazonaws.${var.region}.ecr.dkr"
+  vpc_id            = module.vpc.vpc_id
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = module.vpc.private_subnets
+}
+
+
+# S3 endpoint
+resource "aws_vpc_endpoint" "s3" {
+  service_name    = "com.amazonaws.${var.region}.s3"
+  vpc_id          = module.vpc.vpc_id
+  route_table_ids = module.vpc.private_route_table_ids
+}
+
+resource "aws_vpc_endpoint" "ec2" {
+  service_name      = "com.amazonaws.${var.region}.ec2"
+  vpc_id            = module.vpc.vpc_id
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = module.vpc.private_subnets
+}
+
+resource "aws_vpc_endpoint" "secretsmanager" {
+  service_name      = "com.amazonaws.${var.region}.secretsmanager"
+  vpc_id            = module.vpc.vpc_id
+  vpc_endpoint_type = "Interface"
+  subnet_ids        = module.vpc.private_subnets
+}
+
+
+# Elastic Load Balancing v2 (ALB/NLB)
+resource "aws_vpc_endpoint" "elbv2" {
+  vpc_id              = module.vpc.vpc_id
+  service_name        = "com.amazonaws.${var.region}.elasticloadbalancing"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids          = module.vpc.private_subnets
+}
+
+
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id              = module.vpc.vpc_id
+  service_name        = "com.amazonaws.${var.region}.logs"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+  subnet_ids          = module.vpc.private_subnets
 }
