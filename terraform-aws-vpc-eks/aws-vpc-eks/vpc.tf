@@ -64,29 +64,50 @@ data "aws_iam_policy_document" "flow_log_s3" {
   }
 }
 
+resource "aws_security_group" "vpc_endpoints" {
+  name_prefix = "eks-vpc-endpoint-sg"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress = []
+
+  # Allow HTTPS from all private subnets
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
 # EKS Endpoint
 resource "aws_vpc_endpoint" "eks" {
-  service_name      = "com.amazonaws.${var.region}.eks"
-  vpc_id            = module.vpc.vpc_id
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = module.vpc.private_subnets
+  service_name       = "com.amazonaws.${var.region}.eks"
+  vpc_id             = module.vpc.vpc_id
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = module.vpc.private_subnets
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
 }
 
 # ECR Endpoint
 # ECR API
 resource "aws_vpc_endpoint" "ecr_api" {
-  service_name      = "com.amazonaws.${var.region}.ecr.api"
-  vpc_id            = module.vpc.vpc_id
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = module.vpc.private_subnets
+  service_name       = "com.amazonaws.${var.region}.ecr.api"
+  vpc_id             = module.vpc.vpc_id
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = module.vpc.private_subnets
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
 }
 
 # ECR Docker Registry
 resource "aws_vpc_endpoint" "ecr_dkr" {
-  service_name      = "com.amazonaws.${var.region}.ecr.dkr"
-  vpc_id            = module.vpc.vpc_id
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = module.vpc.private_subnets
+  service_name       = "com.amazonaws.${var.region}.ecr.dkr"
+  vpc_id             = module.vpc.vpc_id
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = module.vpc.private_subnets
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
 }
 
 
@@ -98,17 +119,21 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 resource "aws_vpc_endpoint" "ec2" {
-  service_name      = "com.amazonaws.${var.region}.ec2"
-  vpc_id            = module.vpc.vpc_id
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = module.vpc.private_subnets
+  service_name       = "com.amazonaws.${var.region}.ec2"
+  vpc_id             = module.vpc.vpc_id
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = module.vpc.private_subnets
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
 }
 
 resource "aws_vpc_endpoint" "secretsmanager" {
-  service_name      = "com.amazonaws.${var.region}.secretsmanager"
-  vpc_id            = module.vpc.vpc_id
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = module.vpc.private_subnets
+  service_name       = "com.amazonaws.${var.region}.secretsmanager"
+  vpc_id             = module.vpc.vpc_id
+  vpc_endpoint_type  = "Interface"
+  subnet_ids         = module.vpc.private_subnets
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
 }
 
 
@@ -119,6 +144,8 @@ resource "aws_vpc_endpoint" "elbv2" {
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
   subnet_ids          = module.vpc.private_subnets
+  security_group_ids  = [aws_security_group.vpc_endpoints.id]
+
 }
 
 
@@ -128,4 +155,6 @@ resource "aws_vpc_endpoint" "logs" {
   vpc_endpoint_type   = "Interface"
   private_dns_enabled = true
   subnet_ids          = module.vpc.private_subnets
+  security_group_ids  = [aws_security_group.vpc_endpoints.id]
+
 }

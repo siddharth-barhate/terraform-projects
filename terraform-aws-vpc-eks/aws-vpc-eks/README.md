@@ -77,6 +77,9 @@ Follow these steps to configure and initialize the Terraform project:
 
 | Name | Type |
 |------|------|
+| [aws_security_group.vpc_endpoints](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_security_group_rule.vpc_endpoint_cluster_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
+| [aws_security_group_rule.vpc_endpoint_node_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_vpc_endpoint.ec2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [aws_vpc_endpoint.ecr_api](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
 | [aws_vpc_endpoint.ecr_dkr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_endpoint) | resource |
@@ -95,7 +98,7 @@ Follow these steps to configure and initialize the Terraform project:
 | <a name="input_ami_type"></a> [ami\_type](#input\_ami\_type) | AMI type to use for the managed node group (e.g., 'AL2\_x86\_64', 'BOTTLEROCKET\_x86\_64'). | `string` | n/a | yes |
 | <a name="input_cluster_endpoint_public_access"></a> [cluster\_endpoint\_public\_access](#input\_cluster\_endpoint\_public\_access) | Whether the EKS cluster control plane endpoint is publicly accessible. | `bool` | n/a | yes |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Name of the EKS cluster. | `string` | n/a | yes |
-| <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | Kubernetes version for the EKS cluster (e.g., '1.29'). | `string` | n/a | yes |
+| <a name="input_cluster_version"></a> [cluster\_version](#input\_cluster\_version) | Kubernetes version for the EKS cluster. | `string` | n/a | yes |
 | <a name="input_create_managed_node_group"></a> [create\_managed\_node\_group](#input\_create\_managed\_node\_group) | Whether to create a managed node group as part of the EKS cluster. | `bool` | n/a | yes |
 | <a name="input_enable_cluster_creator_admin_permissions"></a> [enable\_cluster\_creator\_admin\_permissions](#input\_enable\_cluster\_creator\_admin\_permissions) | Whether to grant full administrative permissions to the cluster creator. | `bool` | n/a | yes |
 | <a name="input_enable_flow_log"></a> [enable\_flow\_log](#input\_enable\_flow\_log) | Boolean flag to enable or disable VPC flow logs. | `bool` | n/a | yes |

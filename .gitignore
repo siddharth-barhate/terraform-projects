@@ -36,5 +36,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# In a real wo
 .terraform.lock.hcl

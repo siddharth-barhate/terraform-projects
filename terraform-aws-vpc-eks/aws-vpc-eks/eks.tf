@@ -6,6 +6,7 @@ module "eks" {
   cluster_version                          = var.cluster_version
   cluster_endpoint_public_access           = var.cluster_endpoint_public_access
   enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
+  # Not needed for Auto Mode, but required if Managed Nodegroup is used.
   cluster_addons = {
     coredns                = {}
     eks-pod-identity-agent = {}
@@ -44,4 +45,22 @@ module "eks_managed_node_group" {
     Environment = "dev"
   }
   tags = var.tags
+}
+
+resource "aws_security_group_rule" "vpc_endpoint_cluster_rule" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = module.eks.cluster_primary_security_group_id
+  security_group_id        = aws_security_group.vpc_endpoints.id
+}
+
+resource "aws_security_group_rule" "vpc_endpoint_node_rule" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = module.eks.node_security_group_id
+  security_group_id        = aws_security_group.vpc_endpoints.id
 }
